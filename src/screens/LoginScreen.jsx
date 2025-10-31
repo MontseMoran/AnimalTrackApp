@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import colors from '../constants/colors';
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
  function LoginScreen() {
@@ -9,6 +11,27 @@ import colors from '../constants/colors';
 const [error, setError] = useState('');
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
+const [showPassword, setShowPassword] = useState(false);
+const [remember, setRemember] = useState(false);
+
+
+
+useEffect(() => {
+  const loadSavedEmail = async () => {
+    try {
+      const savedEmail = await AsyncStorage.getItem('savedEmail');
+      if (savedEmail) {
+        setEmail(savedEmail);
+        setRemember(true);
+      }
+    } catch (error) {
+      console.log('Error al cargar correo guardado:', error);
+    }
+  };
+
+  loadSavedEmail();
+}, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inicia sesión</Text>
@@ -24,22 +47,55 @@ const [password, setPassword] = useState('');
   }}
 />
 
-<TextInput
-  style={styles.input}
-  placeholder="Contraseña"
-  secureTextEntry
-  value={password}
-  onChangeText={(text) => {
-    setPassword(text);
-    setError(''); 
-  }}
-/>
+<View style={styles.passwordContainer}>
+  <TextInput
+    style={styles.passwordInput}
+    placeholder="Contraseña"
+    secureTextEntry={!showPassword}
+    value={password}
+    onChangeText={(text) => {
+      setPassword(text);
+      setError('');
+    }}
+  />
+
+  <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+    <Ionicons
+      name={showPassword ? 'eye-off' : 'eye'}
+      size={22}
+      color="#555"
+    />
+  </TouchableOpacity>
+</View>
+
+<View style={styles.rememberContainer}>
+  <TouchableOpacity onPress={() => setRemember(!remember)}>
+    <Ionicons
+      name={remember ? 'checkbox' : 'square-outline'}
+      size={22}
+      color="#007AFF"
+    />
+  </TouchableOpacity>
+  <Text style={styles.rememberText}>Recuérdame</Text>
+</View>
+
 
 <TouchableOpacity
   style={styles.button}
-  onPress={() => {
+  onPress={async () => {
     if (email === 'prueba@correo.com' && password === '1234') {
       setError('');
+
+      // Guarda el correo si el usuario marca "Recuérdame"
+      if (remember) {
+        await AsyncStorage.setItem('savedEmail', email);
+      } else {
+        await AsyncStorage.removeItem('savedEmail');
+      }
+
+
+      await AsyncStorage.setItem('isLoggedIn', 'true');
+
       navigation.navigate('Home');
     } else {
       setError('Correo o contraseña incorrectos');
@@ -48,6 +104,7 @@ const [password, setPassword] = useState('');
 >
   <Text style={styles.buttonText}>Entrar</Text>
 </TouchableOpacity>
+
 
 {error ? <Text style={styles.error}>{error}</Text> : null}
 
@@ -114,6 +171,31 @@ buttonText: {
   color: colors.cardBackground,
   fontSize: 16,
   fontWeight: 'bold',
+},
+passwordContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: '#ccc',
+  borderRadius: 8,
+  paddingHorizontal: 10,
+  marginBottom: 12,
+  width: '80%', 
+  backgroundColor: '#fff',
+},
+passwordInput: {
+  flex: 1,
+  height: 40,
+},
+rememberContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 20,
+},
+rememberText: {
+  marginLeft: 8,
+  fontSize: 16,
+  color: '#333',
 },
 
 });

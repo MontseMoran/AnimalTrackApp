@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import colors from '../constants/colors'
 
@@ -13,13 +13,13 @@ import colors from '../constants/colors'
         Registra, cuida y sigue la historia clínica de tus animales desde tu móvil.
       </Text>
 
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Comenzar"
-          color="#8b6b18"
-          onPress={() => navigation.navigate('Login')}
-        />
-      </View>
+           <TouchableOpacity
+        style={styles.button}
+         activeOpacity={0.8} 
+        onPress={() => navigation.navigate('Login')}
+      >
+        <Text style={styles.buttonText}>Comenzar</Text>
+      </TouchableOpacity>
     </View>
   );
 }

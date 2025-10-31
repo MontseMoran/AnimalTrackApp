@@ -4,42 +4,39 @@
     "slug": "AnimalTrackApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+     "icon": "./assets/images/logo.png",
     "scheme": "animaltrackapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.AnimalTrackApp"
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
-      },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
-    },
+  "adaptiveIcon": {
+    "foregroundImage": "./assets/images/logo.png",
+    "backgroundColor": "#E6F4FE"
+  },
+  "edgeToEdgeEnabled": true,
+  "predictiveBackGestureEnabled": false,
+  "package": "com.anonymous.AnimalTrackApp"
+},
+
     "web": {
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "output": "single",
+      "favicon": "./assets/images/logo.png"
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
-          "dark": {
-            "backgroundColor": "#000000"
-          }
-        }
-      ]
-    ],
+   "plugins": [
+  [
+    "expo-splash-screen",
+    {
+      "image": "./assets/images/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#E6F4FE"
+    }
+  ]
+],
+
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
